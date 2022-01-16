@@ -9,7 +9,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: colors.primary.main,
   },
-  content: {paddingTop: screen.height * 0.2},
+  content: {paddingTop: screen.height * 0.1},
   logoContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -41,7 +41,8 @@ export default StyleSheet.create({
     height: 26,
   },
   header: {
-    padding: CONTAINER_PADDING,
+    paddingTop: CONTAINER_PADDING / 2,
+    paddingHorizontal: CONTAINER_PADDING,
     alignItems: 'flex-end',
   },
 });

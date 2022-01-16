@@ -1,31 +1,14 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  StatusBar,
-} from 'react-native';
+import {View, StyleSheet, ScrollView, StatusBar} from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import {RowSeparator} from '../components';
+import {RowSeparator, OptionListItem} from '../components';
 import {colors} from '../theme';
 import {openURL} from '../utils';
-
-const OptionListItem = ({text, iconRight, onPress}) => {
-  return (
-    <TouchableOpacity style={styles.optionListItem} onPress={onPress}>
-      <Text style={styles.optionListItemText}>{text}</Text>
-      <View style={styles.rightIconWrapper}>{iconRight}</View>
-    </TouchableOpacity>
-  );
-};
 
 const Options = () => {
   return (
     <View style={styles.optionsListWrapper}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      <Text style={styles.optionListHeading}>List</Text>
       <ScrollView>
         <OptionListItem
           text="Themes"
@@ -59,6 +42,7 @@ const styles = StyleSheet.create({
   optionsListWrapper: {
     flex: 1,
     paddingVertical: 20,
+    backgroundColor: '#fff',
   },
   optionListHeading: {
     fontSize: 24,

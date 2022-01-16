@@ -79,7 +79,7 @@ const Home = ({navigation}) => {
           <ConversionInput
             text="USD"
             value="123"
-            onButtonPress={() => alert('---')}
+            onButtonPress={() => navigation.push('Currency List')}
             keyboardType="numeric"
             onChangeText={text => console.log('text', text)}
             onLayout={event => (usdInput.current = event.nativeEvent.layout)}
@@ -87,7 +87,7 @@ const Home = ({navigation}) => {
           <ConversionInput
             text="GBP"
             value="123"
-            onButtonPress={() => alert('---')}
+            onButtonPress={() => navigation.push('Currency List')}
             editable={false}
           />
           <Text style={styles.resultText}>
@@ -102,7 +102,7 @@ const Home = ({navigation}) => {
                 style={styles.reverseIcon}
               />
             }
-            onPress={() => alert('hhh')}
+            onPress={() => navigation.push('Currency List')}
           />
         </View>
         <KeyboardSpacer onToggle={visible => setScrollEnabled(visible)} />
