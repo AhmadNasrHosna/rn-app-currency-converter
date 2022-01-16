@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  StatusBar,
 } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import {RowSeparator} from '../components';
@@ -23,6 +24,7 @@ const OptionListItem = ({text, iconRight, onPress}) => {
 const Options = () => {
   return (
     <View style={styles.optionsListWrapper}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <Text style={styles.optionListHeading}>List</Text>
       <ScrollView>
         <OptionListItem

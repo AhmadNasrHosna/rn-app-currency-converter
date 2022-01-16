@@ -1,9 +1,18 @@
-import React, { useEffect, useRef, useState} from 'react';
-import {View, StatusBar, Image, Text, ScrollView} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  View,
+  StatusBar,
+  Image,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import {colors} from '../../theme';
 import {Button, ConversionInput, KeyboardSpacer} from '../../components';
 import {format} from 'date-fns';
 import styles from './Home.styles';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 
 const logoBackground = require('../../assets/images/background.png');
 const logoIcon = require('../../assets/images/logo.png');
@@ -18,7 +27,7 @@ const CONVERSION_RATE = 0.89824;
 
 const TODAY = format(new Date(), 'MMM dd, yyyy');
 
-const Home = () => {
+const Home = ({navigation}) => {
   const contentScrollView = useRef(null);
   const usdInput = useRef(null);
   const [scrollEnabled, setScrollEnabled] = useState(false);
@@ -42,6 +51,13 @@ const Home = () => {
         barStyle="light-content"
         backgroundColor={colors.primary.main}
       />
+      <SafeAreaView>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.push('Options')}>
+            <FeatherIcon name="settings" color="#fff" size={20} />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
       <ScrollView
         style={styles.content}
         ref={contentScrollView}

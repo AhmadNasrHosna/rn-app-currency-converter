@@ -2,12 +2,14 @@ import {StyleSheet} from 'react-native';
 import {screen} from '../../constants/ui';
 import {colors} from '../../theme';
 
+const CONTAINER_PADDING = 20;
+
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.primary.main,
   },
-  content: {paddingTop: 120},
+  content: {paddingTop: screen.height * 0.2},
   logoContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -20,7 +22,7 @@ export default StyleSheet.create({
     height: screen.width * 0.25,
   },
   formWrapper: {
-    paddingHorizontal: 20,
+    paddingHorizontal: CONTAINER_PADDING,
   },
   formHeading: {
     fontSize: 27,
@@ -37,5 +39,9 @@ export default StyleSheet.create({
   reverseIcon: {
     width: 26,
     height: 26,
+  },
+  header: {
+    padding: CONTAINER_PADDING,
+    alignItems: 'flex-end',
   },
 });
