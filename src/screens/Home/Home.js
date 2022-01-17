@@ -31,6 +31,7 @@ const TODAY = format(new Date(), 'MMM dd, yyyy');
 const Home = ({navigation}) => {
   const [baseCurrency, setBaseCurrency] = useState('USD');
   const [quoteCurrency, setQuoteCurrency] = useState('GBP');
+  const [baseCurrencyValue, setBaseCurrencyValue] = useState('100');
   const contentScrollView = useRef(null);
   const baseCurrencyInputLayout = useRef(null);
   const [scrollEnabled, setScrollEnabled] = useState(false);
@@ -46,6 +47,7 @@ const Home = ({navigation}) => {
       animated: true,
     });
   };
+
   const navigateToCurrencyListModal = (options = {}) => {
     navigation.push(routes.CURRENCY_LIST_SCREEN, options);
   };
@@ -56,9 +58,10 @@ const Home = ({navigation}) => {
     }
   }, [scrollEnabled]);
 
+  // Description
   useEffect(() => {
-    console.log({baseCurrency, quoteCurrency});
-  }, [baseCurrency, quoteCurrency]);
+    console.log({baseCurrencyValue});
+  }, [baseCurrencyValue]);
 
   return (
     <View style={styles.container}>
@@ -94,22 +97,29 @@ const Home = ({navigation}) => {
           <Text style={styles.formHeading}>Currency Converter</Text>
           <ConversionInput
             text={baseCurrency}
-            value="123"
+            value={baseCurrencyValue}
             onButtonPress={() =>
               navigateToCurrencyListModal({
                 title: 'Base Currency',
                 activeCurrency: baseCurrency,
               })
             }
+            onChangeText={text => setBaseCurrencyValue(text)}
             keyboardType="numeric"
-            onChangeText={text => console.log('text', text)}
             onLayout={event =>
               (baseCurrencyInputLayout.current = event.nativeEvent.layout)
             }
+            placeholder="Base Currency Value"
           />
           <ConversionInput
             text={quoteCurrency}
-            value="123"
+            value={
+              baseCurrencyValue
+                ? `${parseFloat(baseCurrencyValue * CONVERSION_RATE).toFixed(
+                    2,
+                  )}`
+                : ''
+            }
             onButtonPress={() =>
               navigateToCurrencyListModal({
                 title: 'Quote Currency',
@@ -117,6 +127,7 @@ const Home = ({navigation}) => {
               })
             }
             editable={false}
+            placeholder="Quote Currency Value"
           />
           <Text style={styles.resultText}>
             {`1 ${CURRENCIES.USD} = ${CONVERSION_RATE} ${CURRENCIES.GBP} as of ${TODAY}.`}
