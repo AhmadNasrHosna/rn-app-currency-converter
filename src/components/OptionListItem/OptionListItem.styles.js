@@ -21,8 +21,8 @@ export default StyleSheet.create({
   },
   rightIconWrapper: {
     backgroundColor: colors.primary.main,
-    width: 32,
-    height: 32,
+    width: 30,
+    height: 30,
     borderRadius: 32 / 2,
     alignItems: 'center',
     justifyContent: 'center',

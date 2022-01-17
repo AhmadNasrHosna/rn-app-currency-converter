@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
   StatusBar,
@@ -29,22 +29,36 @@ const CONVERSION_RATE = 0.89824;
 const TODAY = format(new Date(), 'MMM dd, yyyy');
 
 const Home = ({navigation}) => {
+  const [baseCurrency, setBaseCurrency] = useState('USD');
+  const [quoteCurrency, setQuoteCurrency] = useState('GBP');
   const contentScrollView = useRef(null);
-  const usdInput = useRef(null);
+  const baseCurrencyInputLayout = useRef(null);
   const [scrollEnabled, setScrollEnabled] = useState(false);
 
-  const scrollToUsdInput = () => {
+  const swapCurrencies = () => {
+    setBaseCurrency(quoteCurrency);
+    setQuoteCurrency(baseCurrency);
+  };
+
+  const scrollToBaseCurrencyInput = () => {
     contentScrollView.current.scrollTo({
-      y: usdInput.current?.x + 100,
+      y: baseCurrencyInputLayout.current?.x + 100,
       animated: true,
     });
+  };
+  const navigateToCurrencyListModal = (options = {}) => {
+    navigation.push(routes.CURRENCY_LIST_SCREEN, options);
   };
 
   useEffect(() => {
     if (scrollEnabled) {
-      scrollToUsdInput();
+      scrollToBaseCurrencyInput();
     }
   }, [scrollEnabled]);
+
+  useEffect(() => {
+    console.log({baseCurrency, quoteCurrency});
+  }, [baseCurrency, quoteCurrency]);
 
   return (
     <View style={styles.container}>
@@ -79,23 +93,27 @@ const Home = ({navigation}) => {
         <View style={styles.formWrapper}>
           <Text style={styles.formHeading}>Currency Converter</Text>
           <ConversionInput
-            text="USD"
+            text={baseCurrency}
             value="123"
             onButtonPress={() =>
-              navigation.push(routes.CURRENCY_LIST_SCREEN, {
+              navigateToCurrencyListModal({
                 title: 'Base Currency',
+                activeCurrency: baseCurrency,
               })
             }
             keyboardType="numeric"
             onChangeText={text => console.log('text', text)}
-            onLayout={event => (usdInput.current = event.nativeEvent.layout)}
+            onLayout={event =>
+              (baseCurrencyInputLayout.current = event.nativeEvent.layout)
+            }
           />
           <ConversionInput
-            text="GBP"
+            text={quoteCurrency}
             value="123"
             onButtonPress={() =>
-              navigation.push(routes.CURRENCY_LIST_SCREEN, {
+              navigateToCurrencyListModal({
                 title: 'Quote Currency',
+                activeCurrency: quoteCurrency,
               })
             }
             editable={false}
@@ -112,7 +130,7 @@ const Home = ({navigation}) => {
                 style={styles.reverseIcon}
               />
             }
-            onPress={() => alert('eee')}
+            onPress={() => swapCurrencies()}
           />
         </View>
         <KeyboardSpacer onToggle={visible => setScrollEnabled(visible)} />

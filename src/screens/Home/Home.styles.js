@@ -25,11 +25,12 @@ export default StyleSheet.create({
     paddingHorizontal: CONTAINER_PADDING,
   },
   formHeading: {
-    fontSize: 27,
-    fontWeight: '700',
+    fontSize: 28,
     color: '#fff',
     marginBottom: 30,
     textAlign: 'center',
+    fontFamily: 'BeVietnamPro-Bold',
+    letterSpacing: -0.5,
   },
   resultText: {
     color: '#fff',

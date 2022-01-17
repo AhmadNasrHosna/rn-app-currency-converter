@@ -18,9 +18,10 @@ export const getStyles = (props = {}) =>
     labelText: {
       color: colors.primary.main,
       fontWeight: '600',
-      alignItems: 'center',
+      textAlign: 'center',
       padding: spacing.inputPadding,
-      fontSize: 18,
+      fontSize: 17,
+      minWidth: 64,
     },
     input: {
       flex: 1,

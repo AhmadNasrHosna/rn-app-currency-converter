@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {View, StatusBar, FlatList, StyleSheet} from 'react-native';
 import currencies from '../data/currencies.json';
 import {OptionListItem, RowSeparator} from '../components';
@@ -6,22 +6,34 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import {colors} from '../theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-const CurrencyList = ({navigation}) => {
+const getCurrenciesAndExcludeTheSelectedOne = activeCurrency => {
+  return currencies.filter(currency => activeCurrency !== currency);
+};
+
+const CurrencyList = ({navigation, route}) => {
   const insets = useSafeAreaInsets();
+  const {activeCurrency} = route?.params || {};
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <FlatList
         style={styles.flatList}
-        data={currencies}
+        data={[
+          activeCurrency,
+          ...getCurrenciesAndExcludeTheSelectedOne(activeCurrency),
+        ]}
         renderItem={({item}) => (
           <OptionListItem
             text={item}
-            iconRight={
-              <FeatherIcon name="chevron-right" size={16} color="#fff" />
-            }
             onPress={() => navigation.pop()}
+            {...(activeCurrency === item && {
+              iconRight: <FeatherIcon name="check" size={20} color="#fff" />,
+              activeItemStyle: {
+                borderWidth: 1,
+                borderColor: colors.primary.main,
+              },
+            })}
           />
         )}
         keyExtractor={item => item}
