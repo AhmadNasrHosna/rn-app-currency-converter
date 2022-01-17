@@ -13,6 +13,7 @@ import {Button, ConversionInput, KeyboardSpacer} from '../../components';
 import {format} from 'date-fns';
 import styles from './Home.styles';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import routes from '../../navigation/routes';
 
 const logoBackground = require('../../assets/images/background.png');
 const logoIcon = require('../../assets/images/logo.png');
@@ -53,7 +54,8 @@ const Home = ({navigation}) => {
       />
       <SafeAreaView>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.push('Options')}>
+          <TouchableOpacity
+            onPress={() => navigation.push(routes.OPTIONS_SCREEN)}>
             <FeatherIcon name="settings" color="#fff" size={20} />
           </TouchableOpacity>
         </View>
@@ -79,7 +81,11 @@ const Home = ({navigation}) => {
           <ConversionInput
             text="USD"
             value="123"
-            onButtonPress={() => navigation.push('Currency List')}
+            onButtonPress={() =>
+              navigation.push(routes.CURRENCY_LIST_SCREEN, {
+                title: 'Base Currency',
+              })
+            }
             keyboardType="numeric"
             onChangeText={text => console.log('text', text)}
             onLayout={event => (usdInput.current = event.nativeEvent.layout)}
@@ -87,7 +93,11 @@ const Home = ({navigation}) => {
           <ConversionInput
             text="GBP"
             value="123"
-            onButtonPress={() => navigation.push('Currency List')}
+            onButtonPress={() =>
+              navigation.push(routes.CURRENCY_LIST_SCREEN, {
+                title: 'Quote Currency',
+              })
+            }
             editable={false}
           />
           <Text style={styles.resultText}>
@@ -102,7 +112,7 @@ const Home = ({navigation}) => {
                 style={styles.reverseIcon}
               />
             }
-            onPress={() => navigation.push('Currency List')}
+            onPress={() => alert('eee')}
           />
         </View>
         <KeyboardSpacer onToggle={visible => setScrollEnabled(visible)} />
