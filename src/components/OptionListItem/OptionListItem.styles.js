@@ -10,13 +10,13 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingVertical: 13,
     marginHorizontal: 20,
     marginVertical: 8,
   },
   optionListItemText: {
-    fontSize: 18,
-    color: colors.primary.main,
+    fontSize: 17,
+    color: colors.primary[800],
     fontWeight: '500',
   },
   rightIconWrapper: {

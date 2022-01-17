@@ -4,12 +4,15 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import {RowSeparator, OptionListItem} from '../components';
 import {colors} from '../theme';
 import {openURL} from '../utils';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const Options = () => {
+  const insets = useSafeAreaInsets();
+
   return (
     <View style={styles.optionsListWrapper}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      <ScrollView>
+      <ScrollView style={styles.optionsList}>
         <OptionListItem
           text="Themes"
           iconRight={
@@ -33,6 +36,7 @@ const Options = () => {
           }
           onPress={() => openURL('https://learn.reactnativeschool.com')}
         />
+        <View style={{paddingBottom: insets.bottom}} />
       </ScrollView>
     </View>
   );
@@ -41,9 +45,9 @@ const Options = () => {
 const styles = StyleSheet.create({
   optionsListWrapper: {
     flex: 1,
-    paddingVertical: 20,
     backgroundColor: '#fff',
   },
+  optionsList: {paddingVertical: 20},
   optionListHeading: {
     fontSize: 24,
     fontWeight: '700',

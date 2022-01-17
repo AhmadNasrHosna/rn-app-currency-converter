@@ -5,36 +5,52 @@ import {Home, Options, CurrencyList} from '../screens';
 import routes from './routes';
 import CustomHeader from './components/CustomHeader/CustomHeader';
 
-const Stack = createStackNavigator();
+const MainStack = createStackNavigator();
+const ModalStack = createStackNavigator();
 
-const StackScreen = () => (
-  <Stack.Navigator
+const MainStackScreen = () => (
+  <MainStack.Navigator
     initialRouteName={routes.HOME_SCREEN}
     screenOptions={{
+      presentation: 'screen',
       header: props => <CustomHeader {...props} />,
     }}>
-    <Stack.Screen
+    <MainStack.Screen
       name={routes.HOME_SCREEN}
       component={Home}
-      options={{headerShown: false, title: 'Home'}}
+      options={{headerShown: false}}
     />
-    <Stack.Screen
+    <MainStack.Screen
       name={routes.OPTIONS_SCREEN}
       component={Options}
       options={{headerConfig: {title: 'Options'}}}
     />
-    <Stack.Screen
+  </MainStack.Navigator>
+);
+
+const ModalStackScreen = () => (
+  <ModalStack.Navigator
+    screenOptions={{
+      header: props => <CustomHeader {...props} />,
+      presentation: 'modal',
+    }}>
+    <ModalStack.Screen
+      name={routes.MAIN_STACK}
+      component={MainStackScreen}
+      options={{headerShown: false}}
+    />
+    <MainStack.Screen
       name={routes.CURRENCY_LIST_SCREEN}
       component={CurrencyList}
       options={({route}) => ({
         headerConfig: {title: route.params.title},
       })}
     />
-  </Stack.Navigator>
+  </ModalStack.Navigator>
 );
 
 export default () => (
   <NavigationContainer>
-    <StackScreen />
+    <ModalStackScreen />
   </NavigationContainer>
 );
