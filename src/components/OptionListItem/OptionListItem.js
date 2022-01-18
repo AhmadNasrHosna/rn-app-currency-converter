@@ -6,15 +6,15 @@ const OptionListItem = ({
   text,
   iconRight,
   onPress = () => null,
-  activeItemStyle,
-  onLayout,
+  activeItemStyle = {},
 }) => {
   return (
     <TouchableOpacity
-      style={[styles.optionListItem, activeItemStyle]}
-      onPress={onPress}
-      onLayout={onLayout}>
-      <Text style={styles.optionListItemText}>{text}</Text>
+      style={[styles.optionListItem, activeItemStyle.wrapper]}
+      onPress={onPress}>
+      <Text style={[styles.optionListItemText, activeItemStyle.text]}>
+        {text}
+      </Text>
       {iconRight ? (
         <View style={styles.rightIconWrapper}>{iconRight}</View>
       ) : null}

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   StatusBar,
@@ -9,37 +9,35 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {colors} from '../../theme';
-import {Button, ConversionInput, KeyboardSpacer} from '../../components';
+import {ConversionInput, KeyboardSpacer} from '../../components';
 import {format} from 'date-fns';
 import styles from './Home.styles';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import routes from '../../navigation/routes';
+import {useConversion} from '../../context';
 
 const logoBackground = require('../../assets/images/background.png');
 const logoIcon = require('../../assets/images/logo.png');
-const reverseIcon = require('../../assets/images/reverse.png');
 
 const CURRENCIES = {
   USD: 'USD',
   GBP: 'GBP',
 };
 
-const CONVERSION_RATE = 0.89824;
-
 const TODAY = format(new Date(), 'MMM dd, yyyy');
 
 const Home = ({navigation}) => {
-  const [baseCurrency, setBaseCurrency] = useState('USD');
-  const [quoteCurrency, setQuoteCurrency] = useState('GBP');
   const [baseCurrencyValue, setBaseCurrencyValue] = useState('100');
   const contentScrollView = useRef(null);
   const baseCurrencyInputLayout = useRef(null);
   const [scrollEnabled, setScrollEnabled] = useState(false);
-
-  const swapCurrencies = () => {
-    setBaseCurrency(quoteCurrency);
-    setQuoteCurrency(baseCurrency);
-  };
+  const {
+    state: {baseCurrency, quoteCurrency, conversionRate},
+    dispatch,
+  } = useConversion();
+  const convertedValue = parseFloat(baseCurrencyValue * conversionRate).toFixed(
+    2,
+  );
 
   const scrollToBaseCurrencyInput = () => {
     contentScrollView.current.scrollTo({
@@ -57,11 +55,6 @@ const Home = ({navigation}) => {
       scrollToBaseCurrencyInput();
     }
   }, [scrollEnabled]);
-
-  // Description
-  useEffect(() => {
-    console.log({baseCurrencyValue});
-  }, [baseCurrencyValue]);
 
   return (
     <View style={styles.container}>
@@ -101,7 +94,7 @@ const Home = ({navigation}) => {
             onButtonPress={() =>
               navigateToCurrencyListModal({
                 title: 'Base Currency',
-                activeCurrency: baseCurrency,
+                isBaseCurrency: true,
               })
             }
             onChangeText={text => setBaseCurrencyValue(text)}
@@ -111,38 +104,41 @@ const Home = ({navigation}) => {
             }
             placeholder="Base Currency Value"
           />
+          <TouchableOpacity
+            style={{
+              backgroundColor: colors.primary[300],
+              width: 40,
+              height: 40,
+              borderRadius: 40 / 2,
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'absolute',
+              top: 103,
+              left: 65,
+              zIndex: 1,
+            }}
+            onPress={() => dispatch({type: 'swapCurrencies'})}>
+            <Image
+              source={logoIcon}
+              resizeMode="contain"
+              style={styles.reverseIcon}
+            />
+          </TouchableOpacity>
           <ConversionInput
             text={quoteCurrency}
-            value={
-              baseCurrencyValue
-                ? `${parseFloat(baseCurrencyValue * CONVERSION_RATE).toFixed(
-                    2,
-                  )}`
-                : ''
-            }
+            value={baseCurrencyValue ? `${convertedValue}` : ''}
             onButtonPress={() =>
               navigateToCurrencyListModal({
                 title: 'Quote Currency',
-                activeCurrency: quoteCurrency,
+                isBaseCurrency: false,
               })
             }
             editable={false}
             placeholder="Quote Currency Value"
           />
           <Text style={styles.resultText}>
-            {`1 ${CURRENCIES.USD} = ${CONVERSION_RATE} ${CURRENCIES.GBP} as of ${TODAY}.`}
+            {`1 ${baseCurrency} = ${conversionRate} ${quoteCurrency} as of ${TODAY}.`}
           </Text>
-          <Button
-            text="Reverse Currencies "
-            iconLeft={
-              <Image
-                source={reverseIcon}
-                resizeMode="contain"
-                style={styles.reverseIcon}
-              />
-            }
-            onPress={() => swapCurrencies()}
-          />
         </View>
         <KeyboardSpacer onToggle={visible => setScrollEnabled(visible)} />
       </ScrollView>

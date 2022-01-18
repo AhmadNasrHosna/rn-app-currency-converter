@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import GlobalFont from 'react-native-global-font';
 import Navigation from './src/navigation';
+import {ConversionProvider} from './src/context';
 
 const App = () => {
   // Set font globally
@@ -9,7 +10,11 @@ const App = () => {
     GlobalFont.applyGlobal(fontName);
   }, []);
 
-  return <Navigation />;
+  return (
+    <ConversionProvider>
+      <Navigation />
+    </ConversionProvider>
+  );
 };
 
 export default App;

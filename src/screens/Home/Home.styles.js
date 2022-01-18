@@ -15,7 +15,10 @@ export default StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 40,
   },
-  logoBackground: {width: screen.width * 0.45, height: screen.width * 0.45},
+  logoBackground: {
+    width: screen.width * 0.45,
+    height: screen.width * 0.45,
+  },
   logoIcon: {
     position: 'absolute',
     width: screen.width * 0.25,
@@ -38,8 +41,8 @@ export default StyleSheet.create({
     fontSize: 15,
   },
   reverseIcon: {
-    width: 26,
-    height: 26,
+    width: 22,
+    height: 22,
   },
   header: {
     paddingTop: CONTAINER_PADDING / 2,

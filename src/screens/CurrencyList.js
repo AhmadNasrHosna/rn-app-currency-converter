@@ -1,10 +1,11 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback} from 'react';
 import {View, StatusBar, FlatList, StyleSheet} from 'react-native';
 import currencies from '../data/currencies.json';
 import {OptionListItem, RowSeparator} from '../components';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import {colors} from '../theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useConversion} from '../context';
 
 const getCurrenciesAndExcludeTheSelectedOne = activeCurrency => {
   return currencies.filter(currency => activeCurrency !== currency);
@@ -12,7 +13,33 @@ const getCurrenciesAndExcludeTheSelectedOne = activeCurrency => {
 
 const CurrencyList = ({navigation, route}) => {
   const insets = useSafeAreaInsets();
-  const {activeCurrency} = route?.params || {};
+  const {isBaseCurrency} = route?.params || {};
+  const {
+    state: {baseCurrency, quoteCurrency},
+    dispatch,
+  } = useConversion();
+  const activeCurrency = isBaseCurrency ? baseCurrency : quoteCurrency;
+
+  const handleOnPress = item => {
+    if (isBaseCurrency) {
+      dispatch({
+        type: 'setBaseCurrency',
+        payload: {currency: item},
+      });
+    } else {
+      dispatch({
+        type: 'setQuoteCurrency',
+        payload: {currency: item},
+      });
+    }
+
+    navigation.pop();
+  };
+
+  const isSelected = useCallback(
+    item => activeCurrency === item,
+    [activeCurrency],
+  );
 
   return (
     <View style={styles.container}>
@@ -26,12 +53,12 @@ const CurrencyList = ({navigation, route}) => {
         renderItem={({item}) => (
           <OptionListItem
             text={item}
-            onPress={() => navigation.pop()}
-            {...(activeCurrency === item && {
+            onPress={() => handleOnPress(item)}
+            {...(isSelected(item) && {
               iconRight: <FeatherIcon name="check" size={20} color="#fff" />,
               activeItemStyle: {
-                borderWidth: 1,
-                borderColor: colors.primary.main,
+                wrapper: {borderWidth: 1, borderColor: colors.primary.main},
+                text: {fontWeight: '600'},
               },
             })}
           />
@@ -73,4 +100,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
 export default CurrencyList;
