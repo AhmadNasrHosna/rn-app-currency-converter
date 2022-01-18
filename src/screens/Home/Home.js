@@ -15,14 +15,10 @@ import styles from './Home.styles';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import routes from '../../navigation/routes';
 import {useConversion} from '../../context';
+import {api} from '../../api';
 
 const logoBackground = require('../../assets/images/background.png');
 const logoIcon = require('../../assets/images/logo.png');
-
-const CURRENCIES = {
-  USD: 'USD',
-  GBP: 'GBP',
-};
 
 const TODAY = format(new Date(), 'MMM dd, yyyy');
 
@@ -38,6 +34,12 @@ const Home = ({navigation}) => {
   const convertedValue = parseFloat(baseCurrencyValue * conversionRate).toFixed(
     2,
   );
+
+  useEffect(() => {
+    api('/latest?base=USD')
+      .then(res => console.log({res}))
+      .catch(err => console.log({err}));
+  }, []);
 
   const scrollToBaseCurrencyInput = () => {
     contentScrollView.current.scrollTo({
