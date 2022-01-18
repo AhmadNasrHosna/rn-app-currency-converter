@@ -23,7 +23,7 @@ export const api = (fullPath = '') => {
           date: TODAY,
           rates: {...rates, [baseCurrency]: 1},
         }),
-      1000,
+      0,
     ),
   );
 };

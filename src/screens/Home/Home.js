@@ -15,7 +15,6 @@ import styles from './Home.styles';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import routes from '../../navigation/routes';
 import {useConversion} from '../../context';
-import {api} from '../../api';
 
 const logoBackground = require('../../assets/images/background.png');
 const logoIcon = require('../../assets/images/logo.png');
@@ -28,17 +27,17 @@ const Home = ({navigation}) => {
   const baseCurrencyInputLayout = useRef(null);
   const [scrollEnabled, setScrollEnabled] = useState(false);
   const {
-    state: {baseCurrency, quoteCurrency, conversionRate},
-    dispatch,
+    state: {baseCurrency, quoteCurrency, rates, date},
+    swapCurrencies,
+    setBaseCurrency,
   } = useConversion();
-  const convertedValue = parseFloat(baseCurrencyValue * conversionRate).toFixed(
-    2,
-  );
+  const convertedValue = parseFloat(
+    baseCurrencyValue * rates?.[quoteCurrency],
+  ).toFixed(2);
 
+  // Set Base currency on App launch
   useEffect(() => {
-    api('/latest?base=USD')
-      .then(res => console.log({res}))
-      .catch(err => console.log({err}));
+    setBaseCurrency();
   }, []);
 
   const scrollToBaseCurrencyInput = () => {
@@ -119,7 +118,7 @@ const Home = ({navigation}) => {
               left: 65,
               zIndex: 1,
             }}
-            onPress={() => dispatch({type: 'swapCurrencies'})}>
+            onPress={swapCurrencies}>
             <Image
               source={logoIcon}
               resizeMode="contain"
@@ -139,7 +138,9 @@ const Home = ({navigation}) => {
             placeholder="Quote Currency Value"
           />
           <Text style={styles.resultText}>
-            {`1 ${baseCurrency} = ${conversionRate} ${quoteCurrency} as of ${TODAY}.`}
+            {`1 ${baseCurrency} = ${
+              rates?.[quoteCurrency] || 0
+            } ${quoteCurrency} as of ${date}.`}
           </Text>
         </View>
         <KeyboardSpacer onToggle={visible => setScrollEnabled(visible)} />

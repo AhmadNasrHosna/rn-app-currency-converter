@@ -15,17 +15,15 @@ const CurrencyList = ({navigation, route}) => {
   const insets = useSafeAreaInsets();
   const {isBaseCurrency} = route?.params || {};
   const {
-    state: {baseCurrency, quoteCurrency},
+    state: {baseCurrency, quoteCurrency, rates},
     dispatch,
+    setBaseCurrency,
   } = useConversion();
   const activeCurrency = isBaseCurrency ? baseCurrency : quoteCurrency;
 
   const handleOnPress = item => {
     if (isBaseCurrency) {
-      dispatch({
-        type: 'setBaseCurrency',
-        payload: {currency: item},
-      });
+      setBaseCurrency(item);
     } else {
       dispatch({
         type: 'setQuoteCurrency',
