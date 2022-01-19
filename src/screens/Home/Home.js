@@ -160,9 +160,9 @@ const Home = ({navigation}) => {
                 <View style={{width: 50, height: 12, borderRadius: 10}} />
               </SkeletonPlaceholder>
             ) : (
-              rates?.[quoteCurrency] || 0
+              `${rates?.[quoteCurrency] || 0} ${quoteCurrency}`
             )}{' '}
-            {`${quoteCurrency} as of ${date}.`}
+            {` as of ${date}.`}
           </Text>
         </View>
         <KeyboardSpacer onToggle={visible => setScrollEnabled(visible)} />
