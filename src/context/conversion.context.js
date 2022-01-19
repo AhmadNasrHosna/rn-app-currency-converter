@@ -16,6 +16,12 @@ const initialState = {
 
 function conversionReducer(state, action) {
   switch (action.type) {
+    case 'setIsLoading': {
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+    }
     case 'setBaseCurrency': {
       return {...state, baseCurrency: action.payload.currency};
     }
@@ -74,6 +80,8 @@ function useConversion() {
 
   const setBaseCurrency = useCallback(
     baseCurrency => {
+      dispatch({type: 'setIsLoading', payload: true});
+
       return api(`/latest?base=${baseCurrency || initialState.baseCurrency}`)
         .then(res => {
           dispatch({
@@ -89,7 +97,8 @@ function useConversion() {
             payload: {rates: res.rates},
           });
         })
-        .catch(err => console.log({err}));
+        .catch(err => console.log({err}))
+        .finally(() => dispatch({type: 'setIsLoading', payload: false}));
     },
     [state],
   );

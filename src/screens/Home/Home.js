@@ -10,16 +10,14 @@ import {
 } from 'react-native';
 import {colors} from '../../theme';
 import {ConversionInput, KeyboardSpacer} from '../../components';
-import {format} from 'date-fns';
 import styles from './Home.styles';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import routes from '../../navigation/routes';
 import {useConversion} from '../../context';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 const logoBackground = require('../../assets/images/background.png');
 const logoIcon = require('../../assets/images/logo.png');
-
-const TODAY = format(new Date(), 'MMM dd, yyyy');
 
 const Home = ({navigation}) => {
   const [baseCurrencyValue, setBaseCurrencyValue] = useState('100');
@@ -27,12 +25,13 @@ const Home = ({navigation}) => {
   const baseCurrencyInputLayout = useRef(null);
   const [scrollEnabled, setScrollEnabled] = useState(false);
   const {
-    state: {baseCurrency, quoteCurrency, rates, date},
+    state: {baseCurrency, quoteCurrency, rates, date, isLoading},
     swapCurrencies,
     setBaseCurrency,
   } = useConversion();
+
   const convertedValue = parseFloat(
-    baseCurrencyValue * rates?.[quoteCurrency],
+    baseCurrencyValue * (rates?.[quoteCurrency] || 0),
   ).toFixed(2);
 
   // Set Base currency on App launch
@@ -98,6 +97,7 @@ const Home = ({navigation}) => {
                 isBaseCurrency: true,
               })
             }
+            isLoading={isLoading}
             onChangeText={text => setBaseCurrencyValue(text)}
             keyboardType="numeric"
             onLayout={event =>
@@ -106,6 +106,7 @@ const Home = ({navigation}) => {
             placeholder="Base Currency Value"
           />
           <TouchableOpacity
+            disabled={isLoading}
             style={{
               backgroundColor: colors.primary[300],
               width: 40,
@@ -134,13 +135,23 @@ const Home = ({navigation}) => {
                 isBaseCurrency: false,
               })
             }
+            isLoading={isLoading}
             editable={false}
             placeholder="Quote Currency Value"
           />
           <Text style={styles.resultText}>
-            {`1 ${baseCurrency} = ${
+            {`1 ${baseCurrency} =`}{' '}
+            {isLoading ? (
+              <SkeletonPlaceholder
+                backgroundColor={colors.primary[200]}
+                highlightColor={colors.primary[400]}
+                speed={1200}>
+                <View style={{width: 50, height: 12, borderRadius: 10}} />
+              </SkeletonPlaceholder>
+            ) : (
               rates?.[quoteCurrency] || 0
-            } ${quoteCurrency} as of ${date}.`}
+            )}{' '}
+            {`${quoteCurrency} as of ${date}.`}
           </Text>
         </View>
         <KeyboardSpacer onToggle={visible => setScrollEnabled(visible)} />
