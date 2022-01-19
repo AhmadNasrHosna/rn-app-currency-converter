@@ -140,10 +140,21 @@ const Home = ({navigation}) => {
             placeholder="Quote Currency Value"
           />
           <Text style={styles.resultText}>
-            {`1 ${baseCurrency} =`}{' '}
+            1{' '}
             {isLoading ? (
               <SkeletonPlaceholder
-                backgroundColor={colors.primary[200]}
+                backgroundColor={colors.primary[100]}
+                highlightColor={colors.primary[400]}
+                speed={1200}>
+                <View style={{width: 50, height: 12, borderRadius: 10}} />
+              </SkeletonPlaceholder>
+            ) : (
+              baseCurrency
+            )}{' '}
+            ={' '}
+            {isLoading ? (
+              <SkeletonPlaceholder
+                backgroundColor={colors.primary[100]}
                 highlightColor={colors.primary[400]}
                 speed={1200}>
                 <View style={{width: 50, height: 12, borderRadius: 10}} />
